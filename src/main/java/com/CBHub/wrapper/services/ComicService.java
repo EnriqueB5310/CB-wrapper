@@ -1,8 +1,10 @@
-package com.CBHub.wrapper.util;
+package com.CBHub.wrapper.services;
 
 
 //utility class for making direct calls to marvel API
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -10,12 +12,13 @@ import org.springframework.web.client.RestTemplate;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 @Service
 public class ComicService {
+
+@Autowired
+    CacheManager cacheManager;
 
 
     md5Hasher hasher;

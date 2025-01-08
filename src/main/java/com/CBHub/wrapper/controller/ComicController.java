@@ -1,7 +1,7 @@
 package com.CBHub.wrapper.controller;
 
 
-import com.CBHub.wrapper.util.ComicService;
+import com.CBHub.wrapper.services.ComicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
