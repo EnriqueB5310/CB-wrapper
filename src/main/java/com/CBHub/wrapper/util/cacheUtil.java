@@ -1,4 +1,4 @@
-package com.CBHub.wrapper.services;
+package com.CBHub.wrapper.util;
 
 
 import org.springframework.beans.factory.annotation.Autowired;

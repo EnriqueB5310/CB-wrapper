@@ -1,7 +1,7 @@
 package com.CBHub.wrapper.controller;
 
 
-import com.CBHub.wrapper.services.ComicService;
+import com.CBHub.wrapper.payloads.WeeklyComics;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +15,7 @@ import java.util.Map;
 public class ComicController {
 
     @Autowired
-    private ComicService service;
+    private WeeklyComics service;
 
     /**
      * Endpoint to fetch weekly releases as of reqest

@@ -1,4 +1,4 @@
-package com.CBHub.wrapper.services;
+package com.CBHub.wrapper.util;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;

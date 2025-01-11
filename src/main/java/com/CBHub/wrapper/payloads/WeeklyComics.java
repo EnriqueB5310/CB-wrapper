@@ -1,8 +1,10 @@
-package com.CBHub.wrapper.services;
+package com.CBHub.wrapper.payloads;
 
 
 //utility class for making direct calls to marvel API
 
+import com.CBHub.wrapper.services.WeeklyComicService;
+import com.CBHub.wrapper.util.md5Hasher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.Cacheable;
@@ -15,7 +17,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 @Service
-public class ComicService {
+public class WeeklyComics implements WeeklyComicService {
 
 @Autowired
     CacheManager cacheManager;
@@ -32,9 +34,10 @@ public class ComicService {
      * Fetches weekly comics from marvel API.
      * results are cached
      *
-     * @return JSON response from the marvel API as a String
+     * @return JSON response from the marvel API containing the weekly releases of comics
      */
     @Cacheable("thisWeeksComics")
+    @Override
     public Map<String,Object> getWeeklyComics() throws NoSuchAlgorithmException {
 
         LocalDate today = LocalDate.now();
