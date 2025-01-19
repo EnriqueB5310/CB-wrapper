@@ -18,7 +18,7 @@ public class ComicController {
     private WeeklyComics service;
 
     /**
-     * Endpoint to fetch weekly releases as of reqest
+     * Endpoint to fetch weekly releases as of request
      *
      * @return JSON response of weekly comics from marvel API
      */
