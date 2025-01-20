@@ -1,11 +1,10 @@
 package com.CBHub.wrapper.controller;
 
 
+import com.CBHub.wrapper.payloads.Comics;
 import com.CBHub.wrapper.payloads.WeeklyComics;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
@@ -17,6 +16,9 @@ public class ComicController {
     @Autowired
     private WeeklyComics service;
 
+    @Autowired
+    private Comics comicService;
+
     /**
      * Endpoint to fetch weekly releases as of request
      *
@@ -26,6 +28,12 @@ public class ComicController {
     @GetMapping("/this-week")
     public Map<String, Object> getThisWeek() throws NoSuchAlgorithmException {
         return service.getWeeklyComics();
+    }
+
+    @GetMapping("/comic")
+    @ResponseBody
+    public Map<String,Object> getComic(@RequestParam int id) throws NoSuchAlgorithmException {
+        return comicService.getComic(id);
     }
 
 }

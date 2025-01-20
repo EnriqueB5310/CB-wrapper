@@ -5,11 +5,13 @@ import com.CBHub.wrapper.util.md5Hasher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 
+@Service
 public class Comics implements ComicService {
 
 
@@ -23,19 +25,21 @@ public class Comics implements ComicService {
     private static final String PrivateKey = "16d2a0d1717b7b50c601570e495512d7d9474508";
 
     /**
-     * 
      * @param id
      * @return
      * @throws NoSuchAlgorithmException
      */
-    @Override
+
+
     @Cacheable("Comic")
+    @Override
     public Map<String, Object> getComic(int id) throws NoSuchAlgorithmException {
         String timestamp = String.valueOf(System.currentTimeMillis());
         String input = timestamp + PrivateKey + PublicKey;
         String hash = md5Hasher.getMd5(input);
+
         RestTemplate restTemplate = new RestTemplate();
-        String url = String.format( "%s/comics/%d?ts=%d&apikey=%s&hash=%s",
+        String url = String.format( "%s/%d?ts=%s&apikey=%s&hash=%s",
                 BaseURL, id, timestamp, PublicKey, hash);
 
         return restTemplate.getForObject(url,Map.class);
