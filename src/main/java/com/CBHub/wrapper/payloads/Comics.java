@@ -1,5 +1,6 @@
 package com.CBHub.wrapper.payloads;
 
+import com.CBHub.wrapper.exceptions.ComicNotFoundException;
 import com.CBHub.wrapper.services.ComicService;
 import com.CBHub.wrapper.util.md5Hasher;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,10 @@ public class Comics implements ComicService {
 
     @Cacheable("Comic")
     @Override
-    public Map<String, Object> getComic(int id) throws NoSuchAlgorithmException {
+    public Map<String, Object> getComic(Integer id) throws NoSuchAlgorithmException {
+
+        if (id == null) throw new ComicNotFoundException();
+
         String timestamp = String.valueOf(System.currentTimeMillis());
         String input = timestamp + PrivateKey + PublicKey;
         String hash = md5Hasher.getMd5(input);
@@ -43,7 +47,6 @@ public class Comics implements ComicService {
                 BaseURL, id, timestamp, PublicKey, hash);
 
         return restTemplate.getForObject(url,Map.class);
-
 
 
     }

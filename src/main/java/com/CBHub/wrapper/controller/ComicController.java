@@ -1,6 +1,7 @@
 package com.CBHub.wrapper.controller;
 
 
+import com.CBHub.wrapper.exceptions.ComicNotFoundException;
 import com.CBHub.wrapper.payloads.Comics;
 import com.CBHub.wrapper.payloads.WeeklyComics;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,8 @@ public class ComicController {
     @GetMapping("/comic")
     @ResponseBody
     public Map<String,Object> getComic(@RequestParam int id) throws NoSuchAlgorithmException {
+
+
         return comicService.getComic(id);
     }
 
