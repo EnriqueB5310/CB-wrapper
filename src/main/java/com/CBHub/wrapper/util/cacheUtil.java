@@ -20,4 +20,9 @@ public class cacheUtil {
     @CacheEvict(value ="thisWeeksComics", allEntries = true)
     public void clearWeeklyCache() {};
 
+
+    @Scheduled(cron = "0 0 01 * *") //midnight first of every month
+    @CacheEvict(value="Comic", allEntries = true)
+    public void clearComicCache() {};
+
 }

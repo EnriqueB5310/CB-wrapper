@@ -22,7 +22,7 @@ public class ComicController {
 
     /**
      * Endpoint to fetch weekly releases as of request
-     *
+     * http://localhost:8080/comics/this-week
      * @return JSON response of weekly comics from marvel API
      */
 
@@ -31,6 +31,13 @@ public class ComicController {
         return service.getWeeklyComics();
     }
 
+
+    /**
+     * http://localhost:8080/comics/comic?id=
+     * @param id
+     * @return
+     * @throws NoSuchAlgorithmException
+     */
     @GetMapping("/comic")
     @ResponseBody
     public Map<String,Object> getComic(@RequestParam int id) throws NoSuchAlgorithmException {
