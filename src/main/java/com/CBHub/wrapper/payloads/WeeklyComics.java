@@ -36,8 +36,9 @@ public class WeeklyComics implements WeeklyComicService {
      *
      * @return JSON response from the marvel API containing the weekly releases of comics
      */
-    @Cacheable("thisWeeksComics")
+
     @Override
+    @Cacheable(value="thisWeeksComics")
     public Map<String,Object> getWeeklyComics() throws NoSuchAlgorithmException {
 
         LocalDate today = LocalDate.now();
