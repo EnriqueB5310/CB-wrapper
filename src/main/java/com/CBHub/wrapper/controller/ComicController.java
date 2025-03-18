@@ -1,10 +1,8 @@
 package com.CBHub.wrapper.controller;
 
 
-import com.CBHub.wrapper.exceptions.ComicNotFoundException;
-import com.CBHub.wrapper.payloads.Comics;
-import com.CBHub.wrapper.payloads.WeeklyComics;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.CBHub.wrapper.serviceImpl.Comics;
+import com.CBHub.wrapper.serviceImpl.WeeklyComics;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.NoSuchAlgorithmException;
@@ -14,11 +12,16 @@ import java.util.Map;
 @RequestMapping("/comics")
 public class ComicController {
 
-    @Autowired
+
     private WeeklyComics service;
 
-    @Autowired
+
     private Comics comicService;
+
+    public ComicController(WeeklyComics service, Comics comicService) {
+        this.service = service;
+        this.comicService = comicService;
+    }
 
     /**
      * Endpoint to fetch weekly releases as of request

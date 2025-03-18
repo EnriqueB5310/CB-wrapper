@@ -1,4 +1,4 @@
-package com.CBHub.wrapper.payloads;
+package com.CBHub.wrapper.serviceImpl;
 
 
 //utility class for making direct calls to marvel API
@@ -7,7 +7,9 @@ import com.CBHub.wrapper.services.WeeklyComicService;
 import com.CBHub.wrapper.util.md5Hasher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -29,6 +31,10 @@ public class WeeklyComics implements WeeklyComicService {
     private static final String PublicKey = "23bcbeb0ba49ee64a339eae3329ad658";
     private static final String PrivateKey = "16d2a0d1717b7b50c601570e495512d7d9474508";
 
+
+    public WeeklyComics(md5Hasher hasher) {
+        this.hasher = hasher;
+    }
 
     /**
      * Fetches weekly comics from marvel API.
@@ -63,6 +69,11 @@ public class WeeklyComics implements WeeklyComicService {
         return restTemplate.getForObject(url,Map.class);
 
     }
+
+
+    @Scheduled(cron = "0 0 0 * * MON") //runs monday at midnight
+    @CacheEvict(value ="thisWeeksComics", allEntries = true)
+    public void clearWeeklyCache() {};
 
 
 }
