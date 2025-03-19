@@ -19,16 +19,19 @@ public class Comics implements ComicService {
 
 
 
-    @Autowired
+
     CacheManager cacheManager;
 
     md5Hasher hasher;
+
     private static final String BaseURL = "https://gateway.marvel.com/v1/public/comics";
     private static final String PublicKey = "23bcbeb0ba49ee64a339eae3329ad658";
     private static final String PrivateKey = "16d2a0d1717b7b50c601570e495512d7d9474508";
 
 
-    public Comics(md5Hasher hasher) {
+    public Comics(md5Hasher hasher, CacheManager cacheManager) {
+
+        this.cacheManager = cacheManager;
         this.hasher = hasher;
     }
 

@@ -21,7 +21,7 @@ import java.util.Map;
 @Service
 public class WeeklyComics implements WeeklyComicService {
 
-@Autowired
+
     CacheManager cacheManager;
 
 
@@ -32,7 +32,9 @@ public class WeeklyComics implements WeeklyComicService {
     private static final String PrivateKey = "16d2a0d1717b7b50c601570e495512d7d9474508";
 
 
-    public WeeklyComics(md5Hasher hasher) {
+    public WeeklyComics(md5Hasher hasher, CacheManager cacheManager) {
+
+        this.cacheManager = cacheManager;
         this.hasher = hasher;
     }
 
