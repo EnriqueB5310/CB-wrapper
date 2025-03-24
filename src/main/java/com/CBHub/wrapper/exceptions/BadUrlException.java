@@ -6,5 +6,5 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(value = HttpStatus.NOT_FOUND, reason="Invalid API Url, please see documentation")
 public class BadUrlException extends RuntimeException {
-
+    
 }
