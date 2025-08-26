@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.security.NoSuchAlgorithmException;
+import java.time.Clock;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
@@ -27,20 +28,22 @@ import java.util.Map;
 public class WeeklyComics implements WeeklyComicService {
 
 
-    CacheManager cacheManager;
-
-
-    md5Hasher hasher;
+    private final CacheManager cacheManager;
+    private static  RestTemplate restTemplate;
+    private  final   md5Hasher hasher;
 
     private static final String BaseURL = "https://comicvine.gamespot.com/api/issues/";
     private static final String PublicKey = "2556a3bdb79e127ee06421ae41720c3a17a9bca7";
 
 
 
-    public WeeklyComics(md5Hasher hasher, CacheManager cacheManager) {
+    public WeeklyComics(md5Hasher hasher, CacheManager cacheManager,  RestTemplate restTemplate) {
 
         this.cacheManager = cacheManager;
         this.hasher = hasher;
+
+        this.restTemplate = restTemplate;
+
     }
 
     /**
@@ -75,7 +78,7 @@ public class WeeklyComics implements WeeklyComicService {
         headers.set("User-Agent", "MyComicApp/1.0 (myemail@example.com)");
 
         HttpEntity<String> entity = new HttpEntity<>(headers);
-        RestTemplate restTemplate = new RestTemplate();
+
 
         // Send request with headers
         ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.GET, entity, Map.class);

@@ -6,14 +6,19 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cache.CacheManager;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
@@ -29,9 +34,17 @@ public class WeeklyComicsCacheTest {
     @MockitoSpyBean
     private WeeklyComics spyWeeklyComics;
 
+    @MockitoBean
+    private RestTemplate restTemplate;
 
     @Test
     void testIfCacheWorks() {
+
+        // Arrange: mock API response
+        Map<String, Object> dummyResponse = Map.of("title", "Dummy Comic");
+        when(restTemplate.exchange(anyString(), eq(HttpMethod.GET), any(HttpEntity.class), eq(Map.class)))
+                .thenReturn(ResponseEntity.ok(dummyResponse));
+
     //First call to populate cache
         Map<String,Object> firstCall = spyWeeklyComics.getWeeklyComics();
     //should come from cache
@@ -39,12 +52,19 @@ public class WeeklyComicsCacheTest {
 
         assertEquals(firstCall,secondCall);
 
+        verify(restTemplate, times(1)).exchange(anyString(), eq(HttpMethod.GET), any(HttpEntity.class),eq(Map.class));
+
         verify(spyWeeklyComics, times(1)).getWeeklyComics();
+
 
     }
 
     @Test
     void testCacheEviction() {
+
+        Map<String, Object> dummyResponse = Map.of("title", "Evicted Comic");
+        when(restTemplate.exchange(anyString(), eq(HttpMethod.GET), any(HttpEntity.class), eq(Map.class)))
+                .thenReturn(ResponseEntity.ok(dummyResponse));
 
         spyWeeklyComics.getWeeklyComics();
 
@@ -53,6 +73,8 @@ public class WeeklyComicsCacheTest {
 
         //call again (method should run again since no cache)
         spyWeeklyComics.getWeeklyComics();
+
+        verify(restTemplate, times(2)).exchange(anyString(), eq(HttpMethod.GET), any(HttpEntity.class), eq(Map.class));
 
         verify(spyWeeklyComics,times(2)).getWeeklyComics();
 
