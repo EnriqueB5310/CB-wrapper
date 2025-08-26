@@ -15,7 +15,7 @@ import java.time.Instant;
 
 //utility logger to log req/response speeds
 @Component
-@WebFilter("/*")
+@WebFilter("/**")
 public class RequestLogger implements Filter {
 
 
