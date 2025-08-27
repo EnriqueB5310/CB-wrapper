@@ -7,6 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -24,15 +28,15 @@ public class Comics implements ComicService {
 
     md5Hasher hasher;
 
-    private static final String BaseURL = "https://gateway.marvel.com/v1/public/comics";
-    private static final String PublicKey = "23bcbeb0ba49ee64a339eae3329ad658";
-    private static final String PrivateKey = "16d2a0d1717b7b50c601570e495512d7d9474508";
+    private static final String BaseURL = "https://comicvine.gamespot.com/api/issues/";
+    private static final String PublicKey = "2556a3bdb79e127ee06421ae41720c3a17a9bca7";
     private static  RestTemplate restTemplate;
 
-    public Comics(md5Hasher hasher, CacheManager cacheManager) {
+    public Comics(md5Hasher hasher, CacheManager cacheManager, RestTemplate restTemplate) {
 
         this.cacheManager = cacheManager;
         this.hasher = hasher;
+        this.restTemplate = restTemplate;
     }
 
 
@@ -49,15 +53,20 @@ public class Comics implements ComicService {
 
         if (id == null) throw new ComicNotFoundException();
 
-        String timestamp = String.valueOf(System.currentTimeMillis());
-        String input = timestamp + PrivateKey + PublicKey;
-        String hash = md5Hasher.getMd5(input);
+        String url = String.format(
+                "%s4000-%s/?api_key=%s&format=json",
+                BaseURL, id, PublicKey
+        );
 
-        RestTemplate restTemplate = new RestTemplate();
-        String url = String.format( "%s/%d?ts=%s&apikey=%s&hash=%s",
-                BaseURL, id, timestamp, PublicKey, hash);
+       HttpHeaders httpHeaders = new HttpHeaders();
 
-        return restTemplate.getForObject(url,Map.class);
+        httpHeaders.set("User-Agent", "MyComicApp/1.0 (myemail@example.com)");
+
+        HttpEntity<String> entity = new HttpEntity<>(httpHeaders);
+
+        ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.GET, entity, Map.class);
+
+        return response.getBody();
 
 
     }
