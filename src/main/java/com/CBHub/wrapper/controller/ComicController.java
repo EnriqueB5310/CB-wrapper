@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -26,12 +27,12 @@ public class ComicController {
 
     /**
      * Endpoint to fetch weekly releases as of request
-     * http://localhost:8080/comics/this-week
+     * A
      * @return JSON response of weekly comics from marvel API
      */
 
     @GetMapping("/this-week")
-    public Map<String, Object> getThisWeek() throws NoSuchAlgorithmException {
+    public List<Map<String, Object>> getThisWeek() throws NoSuchAlgorithmException {
         return service.getWeeklyComics();
     }
 
