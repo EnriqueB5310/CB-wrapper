@@ -14,6 +14,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -41,22 +42,34 @@ public class WeeklyComicsCacheTest {
     void testIfCacheWorks() {
 
         // Arrange: mock API response
-        Map<String, Object> dummyResponse = Map.of("title", "Dummy Comic");
+        Map<String, Object> mockComic = Map.of(
+                "name", "Dummy Comic",
+                "cover_date", "2025-11-10",
+                "image", Map.of("original_url", "https://example.com/dummy.jpg")
+        );
+
+        Map<String, Object> dummyResponse = Map.of(
+                "results", List.of(mockComic)
+        );
+
         when(restTemplate.exchange(anyString(), eq(HttpMethod.GET), any(HttpEntity.class), eq(Map.class)))
                 .thenReturn(ResponseEntity.ok(dummyResponse));
 
-    //First call to populate cache
-        Map<String,Object> firstCall = spyWeeklyComics.getWeeklyComics();
-    //should come from cache
-        Map<String, Object> secondCall = spyWeeklyComics.getWeeklyComics();
+        // First call to populate cache
+        List<Map<String, Object>> firstCall = spyWeeklyComics.getWeeklyComics();
 
-        assertEquals(firstCall,secondCall);
+        // Should come from cache
+        List<Map<String, Object>> secondCall = spyWeeklyComics.getWeeklyComics();
 
-        verify(restTemplate, times(1)).exchange(anyString(), eq(HttpMethod.GET), any(HttpEntity.class),eq(Map.class));
+        // Assert that both calls return the same result
+        assertEquals(firstCall, secondCall);
 
+        // Verify API was called only once
+        verify(restTemplate, times(1))
+                .exchange(anyString(), eq(HttpMethod.GET), any(HttpEntity.class), eq(Map.class));
+
+        // Verify method was called twice but API only once due to caching
         verify(spyWeeklyComics, times(1)).getWeeklyComics();
-
-
     }
 
     @Test
