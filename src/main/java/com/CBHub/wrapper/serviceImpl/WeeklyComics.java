@@ -70,6 +70,9 @@ public class WeeklyComics implements WeeklyComicService {
 
         for (Map<String, Object> comic : results) {
 
+            // Get the comic's ID
+            Object comicId = comic.get("id");
+
             String releaseDate = (String) comic.get("cover_date");
 
             Map<String, Object> imageData = (Map<String, Object>) comic.get("image");
@@ -89,6 +92,7 @@ public class WeeklyComics implements WeeklyComicService {
             }
 
             Map<String, Object> trimmedComic = new HashMap<>();
+            trimmedComic.put("id", comicId);  // Add the ID here
             trimmedComic.put("title", title);
             trimmedComic.put("releaseDate", releaseDate);
             trimmedComic.put("coverImage", coverImage);

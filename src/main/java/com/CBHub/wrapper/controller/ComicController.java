@@ -38,7 +38,7 @@ public class ComicController {
 
 
     /**
-     * http://localhost:8080/comics/comic?id=1122921
+     * http://localhost:8080/comics/comic?id=1145538
      * @param id
      * @return
      * @throws NoSuchAlgorithmException
