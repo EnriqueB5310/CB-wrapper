@@ -46,7 +46,7 @@ public class WeeklyComics implements WeeklyComicService {
         String dateRange = weekStart.format(formatter) + "|" + weekEnd.format(formatter);
 
         String url = String.format(
-                "%s?api_key=%s&format=json&filter=cover_date:%s,publisher:10,31&sort=cover_date:desc",
+                "%s?api_key=%s&format=json&filter=cover_date:%s,volume.publisher.name:DC Comics|Marvel,volume.first_issue.language:en&sort=cover_date:desc&limit=100",
                 BaseURL, PublicKey, dateRange
         );
 
